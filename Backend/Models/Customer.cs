@@ -26,5 +26,15 @@ namespace Backend.Models
         [ForeignKey("User")]
         public int? UserId { get; set; }
         public Users? User { get; set; }
+
+        public Customer()
+        {
+        }       
+
+        public Customer(string? name, string? phone)
+        {
+            Name = name;
+            Phone = phone;
+        }
     }
 }

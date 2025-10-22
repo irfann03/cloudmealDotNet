@@ -33,5 +33,18 @@ namespace Backend.Models
         [ForeignKey("User")]
         public int? UserId { get; set; }
         public Users? User { get; set; }
+
+        public Kitchen()
+        {
+        }   
+
+        public Kitchen(string? name, string? phone, string? address, double longitude, double latitude)
+        {
+            Name = name;
+            Phone = phone;
+            Address = address;
+            Longitude = longitude;
+            Latitude = latitude;
+        }
     }
 }
