@@ -8,30 +8,30 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models
 {
     public enum Sentiment { POSITIVE, NEGATIVE, NEUTRAL }
-public enum ComplaintArea { FOOD, DELIVERY, SERVICE }
+    public enum ComplaintArea { FOOD, DELIVERY, SERVICE }
 
-public class FeedBack
-{
-    [Key]
-    public int FeedbackId { get; set; }
+    public class FeedBack
+    {
+        [Key]
+        public int FeedbackId { get; set; }
 
-    public string Description { get; set; }
+        public string? Description { get; set; }
 
-    [ForeignKey("Customer")]
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+        public Customer? Customer { get; set; }
 
-    [ForeignKey("Menu")]
-    public int MenuId { get; set; }
-    public Menu Menu { get; set; }
+        [ForeignKey("Menu")]
+        public int MenuId { get; set; }
+        public Menu? Menu { get; set; }
 
-    [ForeignKey("Kitchen")]
-    public int KitchenId { get; set; }
-    public Kitchen Kitchen { get; set; }
+        [ForeignKey("Kitchen")]
+        public int KitchenId { get; set; }
+        public Kitchen? Kitchen { get; set; }
 
-    public Sentiment Sentiment { get; set; }
-    public ComplaintArea ComplaintArea { get; set; }
+        public Sentiment Sentiment { get; set; }
+        public ComplaintArea ComplaintArea { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-}
+        public DateTime CreatedAt { get; set; }
+    }
 }

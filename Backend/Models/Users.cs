@@ -13,17 +13,17 @@ namespace Backend.Models
         public int Id { get; set; }
 
         [Required, EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public UserType UserType { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public Wallet Wallet { get; set; }
-        public Customer Customer { get; set; }
-        public Kitchen Kitchen { get; set; }
+        public Wallet? Wallet { get; set; }
+        public Customer? Customer { get; set; }
+        public Kitchen? Kitchen { get; set; }
     }
 }

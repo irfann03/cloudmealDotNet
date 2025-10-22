@@ -10,28 +10,28 @@ namespace Backend.Models
 {
     [Index(nameof(Phone), IsUnique = true)]
     public class Kitchen
-{
-    [Key]
-    public int KitchenId { get; set; }
+    {
+        [Key]
+        public int KitchenId { get; set; }
 
-    public string Name { get; set; }
-    public string Phone { get; set; }
+        public string? Name { get; set; }
+        public string? Phone { get; set; }
 
-    public string Address { get; set; }
+        public string? Address { get; set; }
 
-    [Required]
-    public double Longitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
 
-    [Required]
-    public double Latitude { get; set; }
+        [Required]
+        public double Latitude { get; set; }
 
-    public List<Menu> Menus { get; set; } = new();
-    public List<MenuItems> MenuItems { get; set; } = new();
-    public List<Orders> Orders { get; set; } = new();
-    public List<FeedBack> Feedbacks { get; set; } = new();
+        public List<Menu> Menus { get; set; } = new();
+        public List<MenuItems> MenuItems { get; set; } = new();
+        public List<Orders> Orders { get; set; } = new();
+        public List<FeedBack> Feedbacks { get; set; } = new();
 
-    [ForeignKey("User")]
-    public int? UserId { get; set; }
-    public Users User { get; set; }
-}
+        [ForeignKey("User")]
+        public int? UserId { get; set; }
+        public Users? User { get; set; }
+    }
 }

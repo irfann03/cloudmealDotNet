@@ -8,19 +8,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models
 {
     public class WeeklyMenu
-{
-    [Key]
-    public int WeeklyMenuId { get; set; }
+    {
+        [Key]
+        public int WeeklyMenuId { get; set; }
 
-    public DateTime StartOfWeek { get; set; }
-    public DayOfWeek DayOfWeek { get; set; }
+        public DateTime StartOfWeek { get; set; }
+        public DayOfWeek DayOfWeek { get; set; }
 
-    [ForeignKey("Customer")]
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+        public Customer? Customer { get; set; }
 
-    [ForeignKey("Menu")]
-    public int MenuId { get; set; }
-    public Menu Menu { get; set; }
-}
+        [ForeignKey("Menu")]
+        public int MenuId { get; set; }
+        public Menu? Menu { get; set; }
+    }
 }

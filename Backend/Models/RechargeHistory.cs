@@ -9,16 +9,16 @@ namespace Backend.Models
 {
     public enum PaymentStatus { PENDING, SUCCESS, FAILED }
     public class RechargeHistory
-{
-    [Key]
-    public int TransactionId { get; set; }
+    {
+        [Key]
+        public int TransactionId { get; set; }
 
-    public float Amount { get; set; }
-    public PaymentStatus PaymentStatus { get; set; }
-    public DateTime InitiatedOn { get; set; } = DateTime.Now;
+        public float Amount { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
+        public DateTime InitiatedOn { get; set; } = DateTime.Now;
 
-    [ForeignKey("Customer")]
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
-}
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+        public Customer? Customer { get; set; }
+    }
 }

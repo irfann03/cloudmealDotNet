@@ -9,24 +9,23 @@ namespace Backend.Models
 {
     public enum AddressType { HOME, WORK }
 
-public class Address
-{
-    [Key]
-    public int AddressId { get; set; }
+    public class Address
+    {
+        [Key]
+        public int AddressId { get; set; }
 
-    public string Details { get; set; }
+        public string? Details { get; set; }
 
-    [Required]
-    public double Longitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
 
-    [Required]
-    public double Latitude { get; set; }
+        [Required]
+        public double Latitude { get; set; }
 
-    public bool DefaultAddress { get; set; }
-    public AddressType AddressType { get; set; }
-
-    [ForeignKey("Customer")]
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
-}
+        public bool DefaultAddress { get; set; }
+        public AddressType AddressType { get; set; }
+        [ForeignKey("Customer")]
+        public int CustomerId { get; set; }
+        public Customer? Customer { get; set; }
+    }
 }

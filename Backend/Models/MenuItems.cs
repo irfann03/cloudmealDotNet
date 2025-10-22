@@ -9,20 +9,20 @@ namespace Backend.Models
 {
     public enum MenuItemType { TIFFIN, LUNCH, DINNER }
     public class MenuItems
-{
-    [Key]
-    public int MenuItemId { get; set; }
+    {
+        [Key]
+        public int MenuItemId { get; set; }
 
-    public string Name { get; set; }
-    public int Price { get; set; }
+        public string? Name { get; set; }
+        public int Price { get; set; }
 
-    public MenuItemType ItemType { get; set; }
-    public MenuType MenuType { get; set; }
+        public MenuItemType ItemType { get; set; }
+        public MenuType MenuType { get; set; }
 
-    public List<Menu> Menus { get; set; } = new();
+        public List<Menu> Menus { get; set; } = new();
 
-    [ForeignKey("Kitchen")]
-    public int? KitchenId { get; set; }
-    public Kitchen Kitchen { get; set; }
-}
+        [ForeignKey("Kitchen")]
+        public int? KitchenId { get; set; }
+        public Kitchen? Kitchen { get; set; }
+    }
 }
