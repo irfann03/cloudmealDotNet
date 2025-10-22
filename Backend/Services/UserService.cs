@@ -21,8 +21,7 @@ namespace Backend.Services
             var existingUser = await _dbContext.Users.Where(u => u.Email == userDto.Email).FirstOrDefaultAsync();
 
             if (existingUser != null)
-                 return null;
-
+                throw new ArgumentException("Email already exists");
             var user = new Users
             {
                 Email = userDto.Email,
