@@ -11,6 +11,7 @@ namespace Backend.Models
     public class RechargeHistory
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionId { get; set; }
 
         public float Amount { get; set; }

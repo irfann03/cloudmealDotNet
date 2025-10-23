@@ -65,5 +65,46 @@ namespace Backend.Services
                 UserType = user.UserType
             };
         }
+
+        public async Task<RechargeResponseDTO> RechargeWalletAsync(float amount, String token)
+        {
+            var session = await _dbContext.UserSession.FirstOrDefaultAsync(s => s.Token == token);
+
+            if (session == null || session.EndTime < DateTime.Now)
+                throw new UnauthorizedAccessException("session Expired, Please login first");
+
+            if (session.UserType != UserType.CUSTOMER)
+                throw new UnauthorizedAccessException("Only customers can recharge wallet");
+
+            var user = await _dbContext.Users
+                .Include(u => u.Customer).
+                Include(u => u.Wallet).
+                FirstOrDefaultAsync(u => u.Id == session.UserId);
+
+            if (user == null || user.Customer == null)
+                throw new ArgumentException("User not found or is not a customer");
+
+            var recharge = new RechargeHistory
+            {
+                Amount = amount,
+                PaymentStatus = PaymentStatus.SUCCESS,
+                InitiatedOn = DateTime.Now,
+                Customer = user.Customer
+            };
+
+            _dbContext.RechargeHistory.Add(recharge);
+            if (user.Wallet != null) user.Wallet.Balance += amount;
+
+            await _dbContext.SaveChangesAsync();
+            Console.WriteLine(recharge.Amount);
+
+            return new RechargeResponseDTO
+            {
+                TransactionId = recharge.TransactionId,
+                Amount = recharge.Amount,
+                PaymentStatus = recharge.PaymentStatus,
+                InitiatedOn = recharge.InitiatedOn
+            };
+        }
     }
 }
