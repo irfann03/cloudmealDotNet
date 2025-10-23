@@ -30,5 +30,19 @@ namespace Backend.Controllers
                 return Unauthorized(result);
             return Ok(result);
         }
+
+        [HttpPost("{id}/Feedback")]
+        public async Task<IActionResult> SubmitFeedback([FromBody] String comment,[FromHeader] String token, [FromRoute] int id)
+        {
+            try
+            {
+                var result = await _customerService.SubmitFeedbackAsync(comment, id, token);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

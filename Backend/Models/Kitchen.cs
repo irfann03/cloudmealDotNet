@@ -12,6 +12,7 @@ namespace Backend.Models
     public class Kitchen
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int KitchenId { get; set; }
 
         public string? Name { get; set; }

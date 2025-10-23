@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public enum Sentiment { POSITIVE, NEGATIVE, NEUTRAL }
-    public enum ComplaintArea { FOOD, DELIVERY, SERVICE }
+    public enum Sentiment { POSITIVE, NEGATIVE}
+    public enum ComplaintArea { QUALITY_ISSUE, QUANTITY_ISSUE,HYGIENE_ISSUE, PACKING_ISSUE}
 
     public class FeedBack
     {

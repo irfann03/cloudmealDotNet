@@ -12,10 +12,11 @@ builder.Services.AddControllers().AddJsonOptions(options =>
         // Allow enum values to be sent as strings like "CUSTOMER"
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });;
-
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IKitchenService, KitchenService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

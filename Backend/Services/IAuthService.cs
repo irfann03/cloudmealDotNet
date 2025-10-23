@@ -10,5 +10,7 @@ namespace Backend.Services
     public interface IAuthService
     {
         public Task<UserSessionDTO?> LoginAsync(LoginRequestDTO loginRequest);
+
+        public Task<UserSession?> ValidateTokenAsync(string token);
     }
 }

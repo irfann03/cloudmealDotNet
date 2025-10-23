@@ -9,5 +9,6 @@ namespace Backend.Services
     public interface ICustomerService
     {
         public Task<String> AddAddressAsync(Address address, String token);
+        public Task<String> SubmitFeedbackAsync(string feedbackText, int MenuId, String token);
     }
 }
