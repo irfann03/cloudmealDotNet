@@ -12,6 +12,7 @@ namespace Backend.Models
     public class UserSession
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SessionId { get; set; }
 
         public string? Token { get; set; }

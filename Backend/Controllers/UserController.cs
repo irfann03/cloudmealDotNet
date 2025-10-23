@@ -14,19 +14,29 @@ namespace Backend.Controllers
     public class UserController : ControllerBase
     {
         public readonly IUserService _userService;
+        public readonly IAuthService _authService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
+            _authService = authService;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<UserResponseDTO>> registerUser([FromBody] UserDTO userDto)
         {
             var result = await _userService.RegisterUserAsync(userDto);
-            if(result == null)
+            if (result == null)
                 return BadRequest("Email already exists");
             return Ok(result);
         }
+        
+        [HttpPost("login")]
+        public async Task<ActionResult<UserSessionDTO>> loginUser([FromBody] LoginRequestDTO loginRequest)
+        {
+            var result = await _authService.LoginAsync(loginRequest);
+            if (result == null)
+                return Unauthorized("Invalid email or password");
+            return Ok(result);}
     }
 }
