@@ -31,8 +31,8 @@ namespace Backend.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id}/Feedback")]
-        public async Task<IActionResult> SubmitFeedback([FromBody] String comment, [FromHeader] String token, [FromRoute] int id)
+        [HttpPost("{menuId}/Feedback")]
+        public async Task<IActionResult> SubmitFeedback([FromBody] String comment, [FromHeader] String token, [FromRoute(Name = "menuId")] int id)
         {
             try
             {

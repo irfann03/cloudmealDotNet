@@ -100,7 +100,7 @@ namespace Backend.Services
                 Customer = customer,
                 Menu = menu,
                 Kitchen = menu.Kitchen,
-                Sentiment = Enum.Parse<Sentiment>(analysis.sentiment, true),
+                Sentiment = Enum.Parse<Sentiment>(analysis!.sentiment!, true),
                 ComplaintArea = analysis.complaint_area != null
                     ? Enum.Parse<ComplaintArea>(analysis.complaint_area, true)
                     : ComplaintArea.QUALITY_ISSUE,

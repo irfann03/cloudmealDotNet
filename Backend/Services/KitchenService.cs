@@ -92,7 +92,7 @@ namespace Backend.Services
 
             _dbContext.Menu.Add(menu);
             await _dbContext.SaveChangesAsync();
-
+            menuDto.menuId = menu.MenuId;
             return menuDto;
         }
 
@@ -120,7 +120,7 @@ namespace Backend.Services
 
             var menuItems = kitchen.MenuItems
             .Where(mi => mi.ItemType.ToString() == type)
-            .Select(mi => new MenuItemDTO(mi.Name, mi.Price, mi.ItemType, mi.MenuType))
+            .Select(mi => new MenuItemDTO(mi.MenuItemId,mi.Name, mi.Price, mi.ItemType, mi.MenuType))
             .ToList();
 
             return menuItems;
@@ -143,15 +143,81 @@ namespace Backend.Services
             .Include(k => k.MenuItems)
             .FirstOrDefaultAsync(k => k.UserId == session.UserId);
 
-            if(kitchen == null)
+            if (kitchen == null)
             {
                 throw new Exception("kitchen not found for this user");
             }
 
             var menuItems = kitchen.MenuItems
-            .Select(mi => new MenuItemDTO(mi.Name, mi.Price, mi.ItemType, mi.MenuType));
+            .Select(mi => new MenuItemDTO(mi.MenuItemId, mi.Name, mi.Price, mi.ItemType, mi.MenuType));
 
             return menuItems;
         }
+
+        public async Task<IEnumerable<MenuDTO>> GetMenusAsync(string token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("session expired, Please login first");
+            }
+
+            if (session.UserType != UserType.KITCHEN)
+            {
+                throw new UnauthorizedAccessException("Invalid session token for kitchen");
+            }
+
+            var kitchen = await _dbContext.Kitchen
+            .Include(k => k.Menus)
+            .FirstOrDefaultAsync(k => k.UserId == session.UserId);
+
+            if (kitchen == null)
+            {
+                throw new Exception("kitchen not found for this user");
+            }
+
+            var menus = kitchen.Menus
+            .Select(m => new MenuDTO(m.MenuId, m.MenuName!, m.Price, m.MenuType)).ToList();
+
+            return menus;
+        }
+        
+        public async Task<IEnumerable<MenuItemDTO>> GetMenuItemsByMenuIdAsync(int menuId, string token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("session expired, Please login first");
+            }
+
+            if (session.UserType != UserType.KITCHEN)
+            {
+                throw new UnauthorizedAccessException("Invalid session token for kitchen");
+            }
+
+            var kitchen = await _dbContext.Kitchen
+            .Include(k => k.Menus)
+            .ThenInclude(m => m.MenuItems)
+            .FirstOrDefaultAsync(k => k.UserId == session.UserId);
+
+            if (kitchen == null)
+            {
+                throw new Exception("kitchen not found for this user");
+            }
+
+            var menu = kitchen.Menus
+            .FirstOrDefault(m => m.MenuId == menuId);
+
+            if(menu == null)
+            {
+                throw new Exception("Menu not found for this kitchen");
+            }
+
+            var menuItems = menu.MenuItems
+            .Select(mi => new MenuItemDTO(mi.MenuItemId, mi.Name, mi.Price, mi.ItemType, mi.MenuType)).ToList();
+            
+            return menuItems;
+        }
+
     }
 }

@@ -13,7 +13,6 @@ namespace Backend.Models
     {
         [Key]
         public int MenuId { get; set; }
-
         public string? MenuName { get; set; }
         public int Price { get; set; }
         public MenuType MenuType { get; set; }
