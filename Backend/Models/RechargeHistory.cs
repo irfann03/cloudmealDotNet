@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Backend.Models
 {
@@ -18,8 +19,10 @@ namespace Backend.Models
         public PaymentStatus PaymentStatus { get; set; }
         public DateTime InitiatedOn { get; set; } = DateTime.Now;
 
+        [JsonIgnore]
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
+        [JsonIgnore]
         public Customer? Customer { get; set; }
     }
 }

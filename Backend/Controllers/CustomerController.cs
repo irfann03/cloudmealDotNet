@@ -32,12 +32,30 @@ namespace Backend.Controllers
         }
 
         [HttpPost("{id}/Feedback")]
-        public async Task<IActionResult> SubmitFeedback([FromBody] String comment,[FromHeader] String token, [FromRoute] int id)
+        public async Task<IActionResult> SubmitFeedback([FromBody] String comment, [FromHeader] String token, [FromRoute] int id)
         {
             try
             {
                 var result = await _customerService.SubmitFeedbackAsync(comment, id, token);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("rechargeHistory")]
+        public async Task<ActionResult<IEnumerable<RechargeHistory>>> GetRechargeHistory([FromHeader] String token)
+        {
+            try
+            {
+                var result = await _customerService.GetRechargeHistoryAsync(token);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {

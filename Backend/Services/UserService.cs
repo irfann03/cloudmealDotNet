@@ -11,10 +11,12 @@ namespace Backend.Services
     public class UserService : IUserService
     {
         public readonly MyDBContext _dbContext;
+        public readonly IAuthService _authService;
 
-        public UserService(MyDBContext dbContext)
+        public UserService(MyDBContext dbContext, IAuthService authService)
         {
             _dbContext = dbContext;
+            _authService = authService;
         }
         public async Task<UserResponseDTO> RegisterUserAsync(UserDTO userDto)
         {
@@ -68,13 +70,9 @@ namespace Backend.Services
 
         public async Task<RechargeResponseDTO> RechargeWalletAsync(float amount, String token)
         {
-            var session = await _dbContext.UserSession.FirstOrDefaultAsync(s => s.Token == token);
-
-            if (session == null || session.EndTime < DateTime.Now)
-                throw new UnauthorizedAccessException("session Expired, Please login first");
-
-            if (session.UserType != UserType.CUSTOMER)
-                throw new UnauthorizedAccessException("Only customers can recharge wallet");
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+                throw new UnauthorizedAccessException("Invalid or expired session token.");
 
             var user = await _dbContext.Users
                 .Include(u => u.Customer).

@@ -12,5 +12,16 @@ namespace Backend.Models
         public MenuItemType ItemType { get; set; }
         public MenuType MenuType { get; set; }
 
+        public MenuItemDTO() { }
+
+        public MenuItemDTO(string? name, int price, MenuItemType itemType, MenuType menuType)
+        {
+            Name = name;
+            Price = price;
+            ItemType = itemType;
+            MenuType = menuType;
+        }
+
+
     }
 }

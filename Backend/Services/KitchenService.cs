@@ -95,5 +95,63 @@ namespace Backend.Services
 
             return menuDto;
         }
+
+        public async Task<IEnumerable<MenuItemDTO>> GetMenuItemsByTypeAsync(string type, string token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("session expired, Please login first");
+            }
+
+            if (session.UserType != UserType.KITCHEN)
+            {
+                throw new UnauthorizedAccessException("Invalid session token for kitchen");
+            }
+
+            var kitchen = await _dbContext.Kitchen
+            .Include(k => k.MenuItems).
+            FirstOrDefaultAsync(k => k.UserId == session.UserId);
+
+            if (kitchen == null)
+            {
+                throw new Exception("kitchen not found for this user");
+            }
+
+            var menuItems = kitchen.MenuItems
+            .Where(mi => mi.ItemType.ToString() == type)
+            .Select(mi => new MenuItemDTO(mi.Name, mi.Price, mi.ItemType, mi.MenuType))
+            .ToList();
+
+            return menuItems;
+        }
+
+        public async Task<IEnumerable<MenuItemDTO>> GetMenuItemsAsync(string token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("session expired, Please login first");
+            }
+
+            if (session.UserType != UserType.KITCHEN)
+            {
+                throw new UnauthorizedAccessException("Invalid session token for kitchen");
+            }
+
+            var kitchen = await _dbContext.Kitchen
+            .Include(k => k.MenuItems)
+            .FirstOrDefaultAsync(k => k.UserId == session.UserId);
+
+            if(kitchen == null)
+            {
+                throw new Exception("kitchen not found for this user");
+            }
+
+            var menuItems = kitchen.MenuItems
+            .Select(mi => new MenuItemDTO(mi.Name, mi.Price, mi.ItemType, mi.MenuType));
+
+            return menuItems;
+        }
     }
 }

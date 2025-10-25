@@ -111,5 +111,27 @@ namespace Backend.Services
             await _dbContext.SaveChangesAsync();
             return "Feedback submitted successfully.";
         }
+
+        public async Task<IEnumerable<RechargeHistory>> GetRechargeHistoryAsync(String token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("Invalid or expired session token.");
+            }
+
+            if (session.UserType.ToString() != "CUSTOMER")
+            {
+                throw new UnauthorizedAccessException("Only customers can view recharge history.");
+            }
+
+            var customer = await _dbContext.Customer
+                .Include(c => c.PastRecharge)
+                .Where(c => c.UserId == session.UserId).FirstOrDefaultAsync();
+
+            if (customer == null) throw new ArgumentException("Customer not found.");
+            
+            return customer.PastRecharge;
+        }
     }
 }

@@ -34,16 +34,24 @@ namespace Backend.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserSessionDTO>> loginUser([FromBody] LoginRequestDTO loginRequest)
         {
-            var result = await _authService.LoginAsync(loginRequest);
-            if (result == null)
-                return Unauthorized("Invalid email or password");
-            return Ok(result);
+            try
+            {
+                var result = await _authService.LoginAsync(loginRequest);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("recharge")]
         public async Task<ActionResult<RechargeResponseDTO>> rechargeWallet([FromHeader] String token, [FromQuery] float amount)
         {
-            Console.WriteLine("reieved amount: " + amount);
             try
             {
                 var result = await _userService.RechargeWalletAsync(amount, token);

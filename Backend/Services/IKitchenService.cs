@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Services
 {
@@ -10,5 +11,7 @@ namespace Backend.Services
     {
         public Task<MenuItemDTO> AddMenuItemAsync(MenuItemDTO menuItemDto, string token);
         public Task<MenuDTO> CreateMenuAsync(MenuDTO menuDto, string token);
+        public Task<IEnumerable<MenuItemDTO>> GetMenuItemsByTypeAsync(string type, string token);
+        public Task<IEnumerable<MenuItemDTO>> GetMenuItemsAsync(string token);
     }
 }

@@ -10,5 +10,6 @@ namespace Backend.Services
     {
         public Task<String> AddAddressAsync(Address address, String token);
         public Task<String> SubmitFeedbackAsync(string feedbackText, int MenuId, String token);
+        public Task<IEnumerable<RechargeHistory>> GetRechargeHistoryAsync(String token);
     }
 }
