@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.Marshalling;
 using System.Threading.Tasks;
 using Backend.Configurations;
 using Backend.Models;
@@ -130,8 +131,57 @@ namespace Backend.Services
                 .Where(c => c.UserId == session.UserId).FirstOrDefaultAsync();
 
             if (customer == null) throw new ArgumentException("Customer not found.");
-            
+
             return customer.PastRecharge;
         }
+
+        public async Task<IEnumerable<KitchenResponseDTO>> GetKitchensAsync(String token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("Invalid or expired session token.");
+            }
+            if (session.UserType.ToString() != "CUSTOMER")
+            {
+                throw new UnauthorizedAccessException("Only customers can view menus.");
+            }
+
+            var kitchens = await _dbContext.Kitchen.ToListAsync();
+
+            var KitchenDTOs = kitchens.Select(k => new KitchenResponseDTO(k.KitchenId, k.Name, k.Phone, k.Address, k.Longitude, k.Latitude));
+
+
+            return KitchenDTOs;
+        }
+
+        public async Task<IEnumerable<MenuResponseDTO>> GetMenusByKitchenIdAsync(int kitchenId, string token)
+        {
+            var session = await _authService.ValidateTokenAsync(token);
+            if (session == null)
+            {
+                throw new UnauthorizedAccessException("session expired, Please login first");
+            }
+
+            if (session.UserType != UserType.CUSTOMER)
+            {
+                throw new UnauthorizedAccessException("Invalid session token for customer");
+            }
+
+            var kitchen = await _dbContext.Kitchen
+            .Include(k => k.Menus)
+            .FirstOrDefaultAsync(k => k.KitchenId == kitchenId);
+
+            if (kitchen == null)
+            {
+                throw new Exception("kitchen not found for this id");
+            }
+
+            var menus = kitchen.Menus
+            .Select(m => new MenuResponseDTO(m.MenuId, m.MenuName!, m.Price, m.MenuType)).ToList();
+
+            return menus;
+        }
+
     }
 }

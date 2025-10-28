@@ -13,7 +13,7 @@ namespace Backend.Services
         public Task<MenuDTO> CreateMenuAsync(MenuDTO menuDto, string token);
         public Task<IEnumerable<MenuItemDTO>> GetMenuItemsByTypeAsync(string type, string token);
         public Task<IEnumerable<MenuItemDTO>> GetMenuItemsAsync(string token);
-        public Task<IEnumerable<MenuDTO>> GetMenusAsync(string token);
+        public Task<IEnumerable<MenuResponseDTO>> GetMenusAsync(string token);
         public Task<IEnumerable<MenuItemDTO>> GetMenuItemsByMenuIdAsync(int menuId, string token);
     }
 }

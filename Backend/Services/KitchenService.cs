@@ -50,6 +50,7 @@ namespace Backend.Services
 
             return new MenuItemDTO
             {
+                MenuItemId = menuItem.MenuItemId,
                 Name = menuItem.Name,
                 Price = menuItem.Price,
                 ItemType = menuItem.ItemType,
@@ -154,7 +155,7 @@ namespace Backend.Services
             return menuItems;
         }
 
-        public async Task<IEnumerable<MenuDTO>> GetMenusAsync(string token)
+        public async Task<IEnumerable<MenuResponseDTO>> GetMenusAsync(string token)
         {
             var session = await _authService.ValidateTokenAsync(token);
             if (session == null)
@@ -177,11 +178,11 @@ namespace Backend.Services
             }
 
             var menus = kitchen.Menus
-            .Select(m => new MenuDTO(m.MenuId, m.MenuName!, m.Price, m.MenuType)).ToList();
+            .Select(m => new MenuResponseDTO(m.MenuId,m.MenuName!,m.Price,m.MenuType)).ToList();
 
             return menus;
         }
-        
+
         public async Task<IEnumerable<MenuItemDTO>> GetMenuItemsByMenuIdAsync(int menuId, string token)
         {
             var session = await _authService.ValidateTokenAsync(token);
@@ -208,16 +209,18 @@ namespace Backend.Services
             var menu = kitchen.Menus
             .FirstOrDefault(m => m.MenuId == menuId);
 
-            if(menu == null)
+            if (menu == null)
             {
                 throw new Exception("Menu not found for this kitchen");
             }
 
             var menuItems = menu.MenuItems
             .Select(mi => new MenuItemDTO(mi.MenuItemId, mi.Name, mi.Price, mi.ItemType, mi.MenuType)).ToList();
-            
+
             return menuItems;
         }
+        
+
 
     }
 }

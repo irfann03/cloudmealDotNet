@@ -62,5 +62,41 @@ namespace Backend.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("kitchens")]
+        public async Task<ActionResult<IEnumerable<MenuDTO>>> GetKitchens([FromHeader] String token)
+        {
+            try
+            {
+                var result = await _customerService.GetKitchensAsync(token);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{kitchenId}/menus")]
+        public async Task<ActionResult<IEnumerable<MenuItemDTO>>> GetMenusForKitchenId([FromHeader] String token,[FromRoute] int kitchenId)
+        {
+            try
+            {
+                var result = await _customerService.GetMenusByKitchenIdAsync(kitchenId, token);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

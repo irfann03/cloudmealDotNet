@@ -17,8 +17,9 @@ namespace Backend.Models
 
         public MenuDTO() { }
 
-        public MenuDTO(string menuName, int price, MenuType menuType, List<int> menuItemIds)
+        public MenuDTO(int Id,string menuName, int price, MenuType menuType, List<int> menuItemIds)
         {
+            menuId = Id;
             MenuName = menuName;
             Price = price;
             MenuType = menuType;
