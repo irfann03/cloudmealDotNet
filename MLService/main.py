@@ -5,14 +5,11 @@ from sentence_transformers import SentenceTransformer# type: ignore
 from sklearn.metrics.pairwise import cosine_similarity # type: ignore
 import numpy as np# type: ignore
 
-# --- FastAPI app ---
 app = FastAPI()
 
-# --- Request model ---
 class FeedbackRequest(BaseModel):
     comment: str
 
-# --- Sentiment Analyzer ---
 analyzer = SentimentIntensityAnalyzer()
 
 def get_sentiment(feedback_text: str):
@@ -22,7 +19,6 @@ def get_sentiment(feedback_text: str):
     else:
         return "NEGATIVE"
 
-# --- Predefined keywords for complaint areas ---
 keywords = {
     "QUALITY_ISSUE": ["quality", "bad taste", "spoiled", "stale", "raw", "undercooked", "overcooked"],
     "QUANTITY_ISSUE": ["less", "small portion", "not enough", "tiny", "insufficient", "shortage"],
@@ -30,10 +26,8 @@ keywords = {
     "PACKING_ISSUE": ["spill", "box", "damaged packaging", "leak", "broken", "crushed"]
 }
 
-# --- Initialize sentence embedding model ---
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
-# --- Prepare embeddings for keywords ---
 keyword_texts = []
 labels = []
 for label, words in keywords.items():
@@ -43,10 +37,8 @@ for label, words in keywords.items():
 
 keyword_embeddings = embedder.encode(keyword_texts, convert_to_tensor=True)
 
-# --- Complaint area classification using embeddings ---
 def classify_complaint(feedback_text: str):
     feedback_embedding = embedder.encode([feedback_text], convert_to_tensor=True)
-    # Move both embeddings to CPU and convert to numpy
     feedback_embedding = feedback_embedding.cpu().numpy()
     keyword_embeddings_cpu = keyword_embeddings.cpu().numpy()
 
@@ -54,7 +46,6 @@ def classify_complaint(feedback_text: str):
     max_idx = np.argmax(similarities)
     return labels[max_idx]
 
-# --- API endpoint ---
 @app.post("/analyze")
 def analyze_feedback(feedback: FeedbackRequest):
     text = feedback.comment
