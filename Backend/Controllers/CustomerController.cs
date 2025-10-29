@@ -82,7 +82,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{kitchenId}/menus")]
-        public async Task<ActionResult<IEnumerable<MenuItemDTO>>> GetMenusForKitchenId([FromHeader] String token,[FromRoute] int kitchenId)
+        public async Task<ActionResult<IEnumerable<MenuItemDTO>>> GetMenusForKitchenId([FromHeader] String token, [FromRoute] int kitchenId)
         {
             try
             {
@@ -97,6 +97,12 @@ namespace Backend.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("selectMenu")]
+        public async Task<ActionResult<String>> SelectMenu([FromHeader] String token)
+        {
+            return "Not Implemented";
         }
     }
 }
