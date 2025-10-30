@@ -72,8 +72,10 @@ namespace Backend.Services
 
             var today = (Day)Enum.Parse(typeof(Day), DateTime.Now.DayOfWeek.ToString().ToUpper());
 
+            Console.WriteLine(today);
+
             var orderedMenus = await _dbContext.WeeklyMenu
-                .Where(wm => wm.DayOfWeek == today+1 && wm.KitchenId == kitchen.KitchenId)
+                .Where(wm => wm.DayOfWeek == today && wm.KitchenId == kitchen.KitchenId)
                 .Select(wm => wm.MenuId)
                 .ToListAsync();
 
