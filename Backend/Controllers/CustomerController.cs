@@ -99,10 +99,6 @@ namespace Backend.Controllers
             }
         }
 
-        [HttpPost("selectMenu")]
-        public async Task<ActionResult<String>> SelectMenu([FromHeader] String token)
-        {
-            return "Not Implemented";
-        }
+        
     }
 }
