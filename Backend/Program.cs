@@ -18,6 +18,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IKitchenService, KitchenService>();
 builder.Services.AddScoped<IWeeklyMenuService, WeeklyMenuService>();
+builder.Services.AddScoped<IOrderService,OrderService>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

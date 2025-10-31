@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public enum OrderStatus { PLACED, CONFIRMED, CANCELLED, DELIVERED }
+    public enum OrderStatus { COMPLETED, NOT_COMPLETED}
 
     public class Orders
     {
@@ -26,10 +26,8 @@ namespace Backend.Models
         public int MenuId { get; set; }
         public Menu? Menu { get; set; }
 
-        public int Quantity { get; set; }
         public double TotalAmount { get; set; }
-        public OrderStatus Status { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.COMPLETED;
+        public DateTime DeliveryDate { get; set; } = DateTime.Now;
     }
 }

@@ -9,7 +9,7 @@ namespace Backend.Services
 {
     public interface IWeeklyMenuService
     {
-        public Task<WeeklyMenuDTO> createWeeklyMenu(WeeklyMenuDTO weeklyMenuDTO, String token);
-        public Task<List<int>> getTodayOrderedMenu(String token);
+        public Task<WeeklyMenuDTO> createWeeklyMenuAsync(WeeklyMenuDTO weeklyMenuDTO, String token);
+        public Task<IEnumerable<DailyOrderResponseDTO>> getTodayOrderedMenuAsync(String token);
     }
 }

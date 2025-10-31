@@ -23,7 +23,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var result = await _weeklyMenuService.createWeeklyMenu(weeklyMenuDTO, token);
+                var result = await _weeklyMenuService.createWeeklyMenuAsync(weeklyMenuDTO, token);
                 return Ok(result);
             }
             catch (UnauthorizedAccessException ex)
@@ -37,20 +37,20 @@ namespace Backend.Controllers
         }
 
         [HttpGet("todayOrderedMenu")]
-        public Task<List<int>> getTodayOrderedMenu([FromHeader] String token)
+        public async Task<ActionResult<IEnumerable<DailyOrderResponseDTO>>> getTodayOrderedMenu([FromHeader] String token)
         {
             try
             {
-                var result = _weeklyMenuService.getTodayOrderedMenu(token);
-                return result;
+                var result = await _weeklyMenuService.getTodayOrderedMenuAsync(token);
+                return Ok(result);
             }
             catch (UnauthorizedAccessException ex)
             {
-                throw new UnauthorizedAccessException(ex.Message);
+                return Unauthorized(ex.Message);
             }
             catch (ArgumentException ex)
             {
-                throw new ArgumentException(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }

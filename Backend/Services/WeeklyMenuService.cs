@@ -22,7 +22,7 @@ namespace Backend.Services
             _authService = authService;
         }
 
-        public async Task<WeeklyMenuDTO> createWeeklyMenu(WeeklyMenuDTO weeklyMenuDTO, String token)
+        public async Task<WeeklyMenuDTO> createWeeklyMenuAsync(WeeklyMenuDTO weeklyMenuDTO, String token)
         {
             var session = await _authService.ValidateTokenAsync(token);
             if (session == null)
@@ -56,9 +56,9 @@ namespace Backend.Services
             return weeklyMenuDTO;
         }
 
-        public async Task<List<int>> getTodayOrderedMenu(String token)
+        public async Task<IEnumerable<DailyOrderResponseDTO>> getTodayOrderedMenuAsync(String token)
         {
-           var session = await _authService.ValidateTokenAsync(token);
+            var session = await _authService.ValidateTokenAsync(token);
             if (session == null)
             {
                 throw new UnauthorizedAccessException("Invalid session token.");
@@ -71,15 +71,17 @@ namespace Backend.Services
             }
 
             var today = (Day)Enum.Parse(typeof(Day), DateTime.Now.DayOfWeek.ToString().ToUpper());
+            var todayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), today.ToString(), true);
+
 
             Console.WriteLine(today);
 
             var orderedMenus = await _dbContext.WeeklyMenu
-                .Where(wm => wm.DayOfWeek == today && wm.KitchenId == kitchen.KitchenId)
-                .Select(wm => wm.MenuId)
-                .ToListAsync();
-
-                return orderedMenus;
+    .Where(wm => wm.DayOfWeek == today && wm.KitchenId == kitchen.KitchenId)
+    .Where(wm => !_dbContext.Orders.Any(o => o.CustomerId == wm.CustomerId && o.MenuId == wm.MenuId &&
+        o.KitchenId == wm.KitchenId && o.DeliveryDate.DayOfWeek == todayOfWeek))
+    .Select(wm => new DailyOrderResponseDTO(wm.CustomerId, wm.MenuId)).ToListAsync();
+            return orderedMenus;
         }
     }
 }
