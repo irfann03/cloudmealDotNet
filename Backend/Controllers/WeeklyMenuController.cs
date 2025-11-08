@@ -36,6 +36,12 @@ namespace Backend.Controllers
             }
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> deleteMenu()
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet("todayOrderedMenu")]
         public async Task<ActionResult<IEnumerable<DailyOrderResponseDTO>>> getTodayOrderedMenu([FromHeader] String token)
         {
